@@ -1,4 +1,3 @@
-<!-- save as index.html and open in a browser -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -50,7 +49,7 @@
     border-radius:12px;
     padding:18px;
     position:relative;
-    box-shadow: 0 6px 30px rgba(0,0,0,0.6);
+    box-shadow: inset -11px 8px 17px 11px rgb(211 96 39);
     border: 2px solid rgba(255,120,40,0.06);
     background:linear-gradient(180deg, rgba(0,0,0,0.06), transparent);
     overflow:hidden;
@@ -160,6 +159,7 @@
     font-size:15px;
     outline:none;
     transition:border-color 200ms;
+    box-shadow: inset -12px 17px 20px 19px rgb(211 81 24 / 18%);
   }
   input:focus{
     border-bottom-color:var(--accent-start);
@@ -175,7 +175,7 @@
     font-weight:600;
     cursor:pointer;
     box-shadow:0 6px 20px rgba(200,70,35,0.2), inset 0 -4px 10px rgba(0,0,0,0.15);
-    transition:transform 160ms ease, box-shadow 160ms;
+    transition:transform 10ms ease, box-shadow 160ms;
   }
   .submit-btn:active{ transform:translateY(1px); }
 
@@ -212,7 +212,7 @@
   .frame.register-active .inner .split::before{
     /* flip clip-path to the other side by rotating */
     transform: rotateY(180deg);
-    transition:transform 700ms cubic-bezier(.2,.9,.3,1);
+    transition:transform 1000ms cubic-bezier(.2,.9,.3,1);
   }
 
   /* We'll animate form transitions by translating forms vertically and fading */
@@ -251,8 +251,6 @@
 </style>
 </head>
 <body>
-
-<h1 class="page-title">Login | Signup Animation</h1>
 
 <div class="frame" id="frame">
   <div class="inner">
@@ -338,7 +336,7 @@
     },
     register: {
       title: 'WELCOME!',
-      text: "We're delighted to have you here. If you need any assistance, feel free to reach out."
+      text: "Please login to continue using benefits."
     }
   };
 
@@ -399,6 +397,5 @@
   /* start focused */
   document.getElementById('loginUser').focus();
 </script>
-
 </body>
 </html>
