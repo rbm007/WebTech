@@ -1,0 +1,404 @@
+<!-- save as index.html and open in a browser -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Login | Signup Animation</title>
+<style>
+  :root{
+    --bg: #272529;
+    --panel: #222126;
+    --accent-start: #ff7a2d;
+    --accent-end: #c84f22;
+    --muted: #bfb8b8;
+    --white: #fff;
+    --radius: 10px;
+  }
+
+  /* Page layout */
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
+    background:var(--bg);
+    color:var(--muted);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  h1.page-title{
+    position:absolute;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    color:var(--white);
+    font-weight:600;
+    letter-spacing:0.6px;
+    font-size:40px;
+    pointer-events:none;
+  }
+
+  /* The glowing frame container */
+  .frame {
+    width: 900px;
+    max-width:94vw;
+    height: 520px;
+    border-radius:12px;
+    padding:18px;
+    position:relative;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.6);
+    border: 2px solid rgba(255,120,40,0.06);
+    background:linear-gradient(180deg, rgba(0,0,0,0.06), transparent);
+    overflow:hidden;
+  }
+  /* outer glow */
+  .frame::after{
+    content:"";
+    pointer-events:none;
+    position:absolute;
+    inset:-8px;
+    border-radius:14px;
+    box-shadow: 0 0 60px 6px rgba(255,110,35,0.18);
+    z-index:0;
+    mix-blend-mode:screen;
+  }
+
+  /* Inner content area with diagonal split */
+  .inner {
+    position:absolute;
+    inset:18px;
+    border-radius:8px;
+    overflow:hidden;
+    background:var(--panel);
+    display:flex;
+    align-items:stretch;
+    z-index:1;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+  }
+
+  /* Diagonal gradient panel on left or right depending on mode */
+  .inner .split {
+    flex:1 1 55%;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .split .message {
+    padding:40px;
+    max-width:420px;
+    color:var(--white);
+    z-index:2;
+  }
+  .split .message h2{
+    margin:0 0 14px 0;
+    font-size:34px;
+    letter-spacing:0.5px;
+  }
+  .split .message p{
+    margin:0;
+    color:rgba(255,255,255,0.85);
+    line-height:1.5;
+  }
+
+  /* The diagonal overlay using clip-path and gradient */
+  .split::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%);
+    clip-path: polygon(0 0, 100% 0, 30% 100%, 0% 100%);
+    opacity:0.95;
+    transform-origin:center;
+    transition:transform 700ms cubic-bezier(.2,.9,.3,1);
+    filter:brightness(0.95);
+  }
+
+  /* Right side area that contains the forms */
+  .forms {
+    flex:1 1 45%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:36px 48px;
+    position:relative;
+    background:transparent;
+  }
+
+  /* Form card styling */
+  form.card {
+    width:100%;
+    z-index:5;
+    color:var(--muted);
+  }
+  form.card h3{
+    color:var(--white);
+    margin:0 0 18px 0;
+    font-size:28px;
+  }
+  .field{
+    margin-bottom:18px;
+    position:relative;
+  }
+  label{
+    display:block;
+    font-size:14px;
+    color:rgba(255,255,255,0.9);
+    margin-bottom:8px;
+  }
+  input[type="text"], input[type="password"], input[type="email"]{
+    width:100%;
+    background:transparent;
+    border:0;
+    border-bottom:2px solid rgba(255,255,255,0.08);
+    padding:10px 8px;
+    color:var(--white);
+    font-size:15px;
+    outline:none;
+    transition:border-color 200ms;
+  }
+  input:focus{
+    border-bottom-color:var(--accent-start);
+  }
+  .submit-btn{
+    display:inline-block;
+    margin-top:10px;
+    padding:14px 28px;
+    border-radius:40px;
+    border: 2px solid rgba(0,0,0,0.25);
+    background:linear-gradient(180deg, rgba(255,140,80,0.95), rgba(200,80,30,0.95));
+    color:var(--white);
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 6px 20px rgba(200,70,35,0.2), inset 0 -4px 10px rgba(0,0,0,0.15);
+    transition:transform 160ms ease, box-shadow 160ms;
+  }
+  .submit-btn:active{ transform:translateY(1px); }
+
+  /* small helper under the button */
+  .toggle-line{
+    margin-top:16px;
+    font-size:14px;
+    text-align:center;
+    color:rgba(255,255,255,0.8);
+  }
+  .toggle-line a{
+    color:var(--accent-start);
+    font-weight:700;
+    text-decoration:none;
+    margin-left:6px;
+    cursor:pointer;
+  }
+
+  /* Positioning variations: default show login on left, register on right */
+  .container {
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:stretch;
+  }
+
+  /* When register is active, flip the split/diagonal to other side and shift forms */
+  .frame.register-active .inner .split{
+    order:2; /* move the split to the right */
+  }
+  .frame.register-active .inner .forms{
+    order:1;
+  }
+  .frame.register-active .inner .split::before{
+    /* flip clip-path to the other side by rotating */
+    transform: rotateY(180deg);
+    transition:transform 700ms cubic-bezier(.2,.9,.3,1);
+  }
+
+  /* We'll animate form transitions by translating forms vertically and fading */
+  .card{
+    opacity:1;
+    transform:translateY(0);
+    transition:opacity 500ms ease, transform 500ms ease;
+  }
+  .card.hidden{
+    opacity:0;
+    transform:translateY(20px);
+    pointer-events:none;
+    height:0;
+  }
+
+  /* small icon placeholders (simple circle) */
+  .icon{
+    width:18px;height:18px;border-radius:50%;
+    background:rgba(255,255,255,0.12);display:inline-block;margin-left:8px;
+  }
+
+  /* Responsive */
+  @media (max-width:880px){
+    .frame{ height:640px; }
+    .inner{flex-direction:column;}
+    .split, .forms { flex-basis:auto; width:100%;}
+    .split::before{ clip-path: polygon(0 0, 100% 0, 100% 40%, 0% 100%); }
+    .frame.register-active .inner .split::before{ transform:none; }
+    .forms{ padding:28px; }
+    .split{ padding:32px; align-items:flex-start; justify-content:flex-start; }
+    .split .message{ padding:18px; }
+  }
+
+  /* tiny accessibility focus */
+  a:focus, button:focus, input:focus { outline: 3px solid rgba(255,120,40,0.12); outline-offset:3px; border-radius:6px; }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Login | Signup Animation</h1>
+
+<div class="frame" id="frame">
+  <div class="inner">
+    <!-- The colored diagonal split area with welcome message -->
+    <div class="split" aria-hidden="true">
+      <div class="message">
+        <h2 id="splitTitle">WELCOME BACK!</h2>
+        <p id="splitText">We are happy to have you with us again. If you need anything, we are here to help.</p>
+      </div>
+    </div>
+
+    <!-- The forms area -->
+    <div class="forms" role="region" aria-label="Authentication forms">
+      <!-- LOGIN -->
+      <form id="loginForm" class="card" onsubmit="handleSubmit(event,'login')">
+        <h3>Login</h3>
+
+        <div class="field">
+          <label for="loginUser">Username</label>
+          <input id="loginUser" type="text" autocomplete="username" required>
+        </div>
+
+        <div class="field">
+          <label for="loginPass">Password</label>
+          <input id="loginPass" type="password" autocomplete="current-password" required>
+        </div>
+
+        <button type="submit" class="submit-btn">Login</button>
+
+        <div class="toggle-line" style="margin-top:18px;">
+          Don't have an account?
+          <a id="toRegister" href="#" role="button">Sign Up</a>
+        </div>
+      </form>
+
+      <!-- REGISTER -->
+      <form id="registerForm" class="card hidden" onsubmit="handleSubmit(event,'register')">
+        <h3>Register</h3>
+
+        <div class="field">
+          <label for="regUser">Username</label>
+          <input id="regUser" type="text" autocomplete="username" required>
+        </div>
+
+        <div class="field">
+          <label for="regEmail">Email</label>
+          <input id="regEmail" type="email" autocomplete="email" required>
+        </div>
+
+        <div class="field">
+          <label for="regPass">Password</label>
+          <input id="regPass" type="password" autocomplete="new-password" required>
+        </div>
+
+        <button type="submit" class="submit-btn">Register</button>
+
+        <div class="toggle-line">
+          Already have an account?
+          <a id="toLogin" href="#" role="button">Sign In</a>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* Grab elements */
+  const frame = document.getElementById('frame');
+  const toRegister = document.getElementById('toRegister');
+  const toLogin = document.getElementById('toLogin');
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+
+  const splitTitle = document.getElementById('splitTitle');
+  const splitText = document.getElementById('splitText');
+
+  /* text variants for panels (mirrors the screenshots) */
+  const textFor = {
+    login: {
+      title: 'WELCOME BACK!',
+      text: 'We are happy to have you with us again. If you need anything, we are here to help.'
+    },
+    register: {
+      title: 'WELCOME!',
+      text: "We're delighted to have you here. If you need any assistance, feel free to reach out."
+    }
+  };
+
+  /* function to show register */
+  function showRegister(){
+    frame.classList.add('register-active');
+
+    loginForm.classList.add('hidden');
+    setTimeout(()=>{ registerForm.classList.remove('hidden'); }, 120);
+
+    // update split panel copy on the left
+    splitTitle.textContent = textFor.register.title;
+    splitText.textContent = textFor.register.text;
+    // focus first field in register
+    setTimeout(()=> document.getElementById('regUser').focus(), 320);
+  }
+
+  /* function to show login */
+  function showLogin(){
+    frame.classList.remove('register-active');
+
+    registerForm.classList.add('hidden');
+    setTimeout(()=>{ loginForm.classList.remove('hidden'); }, 120);
+
+    splitTitle.textContent = textFor.login.title;
+    splitText.textContent = textFor.login.text;
+    setTimeout(()=> document.getElementById('loginUser').focus(), 320);
+  }
+
+  /* attach handlers */
+  toRegister.addEventListener('click', (e)=>{
+    e.preventDefault();
+    showRegister();
+  });
+
+  toLogin.addEventListener('click', (e)=>{
+    e.preventDefault();
+    showLogin();
+  });
+
+  // allow keyboard toggles (Enter)
+  toRegister.addEventListener('keydown', e => { if(e.key === 'Enter') { e.preventDefault(); showRegister(); }});
+  toLogin.addEventListener('keydown', e => { if(e.key === 'Enter') { e.preventDefault(); showLogin(); }});
+
+  /* simple demo submit handler - replace with real auth logic */
+  function handleSubmit(e, mode){
+    e.preventDefault();
+    if(mode === 'login'){
+      // demo: read values
+      const u = document.getElementById('loginUser').value;
+      alert('Logging in as ' + u + ' (demo)');
+    } else {
+      const u = document.getElementById('regUser').value;
+      alert('Registering ' + u + ' (demo)');
+    }
+  }
+
+  /* start focused */
+  document.getElementById('loginUser').focus();
+</script>
+
+</body>
+</html>

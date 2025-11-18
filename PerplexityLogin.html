@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glowing Login Form</title>
+<style>
+body {
+  background: linear-gradient(120deg, #232526, #414345 100%);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-box {
+  background: #27293d;
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 32px 0 rgba(3,233,244,0.2), 0 2.5px 10px 0 rgba(0,0,0,0.12);
+  color: #fff;
+  width: 340px;
+  position: relative;
+}
+.login-header {
+  text-align: center;
+  margin-bottom: 36px;
+  font-size: 1.7rem;
+  letter-spacing: 2px;
+  color: #03e9f4;
+  text-shadow: 0 0 15px #03e9f4;
+}
+.user-box {
+  position: relative;
+  margin-bottom: 32px;
+}
+.user-box input {
+  width: 100%;
+  padding: 16px 12px 10px 12px;
+  background: transparent;
+  border: 2px solid #03e9f4;
+  outline: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 16px;
+  transition: border 0.4s;
+  box-shadow: 0 0 7px 0 #03e9f450;
+}
+.user-box label {
+  position: absolute;
+  left: 12px;
+  top: 16px;
+  color: #bfbfbf;
+  font-size: 16px;
+  pointer-events: none;
+  background: transparent;
+  transition:
+    0.3s cubic-bezier(.4,0,.2,1),
+    color 0.2s,
+    top 0.3s;
+  padding: 0 4px;
+  border-radius: 4px;
+}
+.user-box input:focus,
+.user-box input:not(:placeholder-shown) {
+  border: 2px solid #13c9ff;
+  box-shadow: 0 0 12px #03e9f4;
+}
+.user-box input:focus ~ label,
+.user-box input:not(:placeholder-shown) ~ label {
+  top: -18px;
+  left: 4px;
+  font-size: 13px;
+  color: #03e9f4;
+  text-shadow: 0 0 8px #03e9f4, 0 0 4px #03e9f435;
+  background: #27293d;
+  padding: 0 6px;
+  animation: glowShadow 0.5s linear;
+}
+
+@keyframes glowShadow {
+  0% {
+    text-shadow: 0 0 0px #03e9f4, 0 0 0px #03e9f435;
+  }
+  100% {
+    text-shadow: 0 0 8px #03e9f4, 0 0 4px #03e9f435;
+  }
+}
+.login-box button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #03e9f4, #0bdde4 120%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 17px;
+  box-shadow: 0 0 18px #03e9f4a1;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: box-shadow 0.3s, background 0.3s;
+}
+.login-box button:hover {
+  box-shadow: 0 0 28px #03e9f4ed;
+  background: linear-gradient(90deg, #0bdde4, #03e9f4 100%);
+}
+</style>
+</head>
+<body>
+<div class="login-box">
+  <div class="login-header">Login</div>
+  <form autocomplete="off">
+    <div class="user-box">
+      <input type="text" id="username" required placeholder=" " autocomplete="off"/>
+      <label for="username">Username</label>
+    </div>
+    <div class="user-box">
+      <input type="password" id="password" required placeholder=" " autocomplete="off"/>
+      <label for="password">Password</label>
+    </div>
+    <button type="submit">Sign In</button>
+  </form>
+</div>
+</body>
+</html>

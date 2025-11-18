@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Form</title>
+  <style>
+    body {
+      background: #1e1e2f;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      background: #2c2c3c;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      width: 300px;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-bottom: 2px solid #555;
+      background: transparent;
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .form-group label {
+      position: absolute;
+      left: 10px;
+      top: 12px;
+      color: #aaa;
+      font-size: 16px;
+      pointer-events: none;
+      transition: 0.3s ease all;
+    }
+
+    /* Floating label effect */
+    .form-group input:focus + label,
+    .form-group input:not(:placeholder-shown) + label {
+      top: -10px;
+      left: 5px;
+      font-size: 12px;
+      color: #00e0ff;
+      text-shadow: 0 0 8px #00e0ff;
+    }
+
+    .form-group input:focus {
+      border-bottom: 2px solid #00e0ff;
+      box-shadow: 0 4px 10px rgba(0,224,255,0.4);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: #00e0ff;
+      border: none;
+      border-radius: 5px;
+      color: #1e1e2f;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-btn:hover {
+      background: #00bcd4;
+      box-shadow: 0 4px 12px rgba(0,224,255,0.6);
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <form>
+      <div class="form-group">
+        <input type="text" id="username" placeholder=" " required>
+        <label for="username">Username</label>
+      </div>
+      <div class="form-group">
+        <input type="password" id="password" placeholder=" " required>
+        <label for="password">Password</label>
+      </div>
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+  </div>
+</body>
+</html>
